@@ -1,12 +1,16 @@
 {
-  "name": "apps",
+  "name": "node-for-backend",
   "version": "1.0.0",
-  "description": "my first app",
+  "description": "My first backend app using Express",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon index.js"
   },
+  "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2"
+  }
 }
