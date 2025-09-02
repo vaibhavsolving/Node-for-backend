@@ -1,4 +1,3 @@
-// console.log("jai shree ram");
 
 //going to do, postman,mongo
 const express = require("express")
