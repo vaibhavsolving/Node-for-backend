@@ -12,8 +12,8 @@ app.use(express.json());
 // Instead, it returns a Promise, so you should use .then().catch() or async/await.
 
 mongoose.connect("mongodb://localhost:27017/mynewdb")
-    .then(() => console.log("😁 conneted to MongoDB"))
-    .catch((err) => console.error("😢 MongoDB connetion error:", err));
+    .then(() => console.log(" conneted to MongoDB"))
+    .catch((err) => console.error(" MongoDB connetion error:", err));
 
 // Schema (better use mongoose.Schema)
 const sch = new mongoose.Schema({
