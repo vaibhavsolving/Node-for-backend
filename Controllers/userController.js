@@ -1,4 +1,4 @@
-const User = require("../models/userModel");
+const User = require("../Models/userModel");
 
 // Home
 const home = (req, res) => {
@@ -45,5 +45,6 @@ const createUser = async (req, res) => {
     return res.status(500).json({ msg: "Server Error", error: err.message });
   }
 };
+
 
 module.exports = { home, about, getUsersJson, createUser };

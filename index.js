@@ -4,15 +4,19 @@
 require("dotenv").config();                       // use for security,flexibility(mongodb://127.0.0.1:27017/devDB,mongodb+srv://cluster/...), maintainability
 //console.log("Loaded PORT:", process.env.PORT);              //way of calling .env
 // console.log("Loaded MONGO_URL:", process.env.MONGO_URL);
-
+if (!process.env.JWT_SECRET) {
+  console.error("FATAL: JWT_SECRET is not set in .env (process.env.JWT_SECRET is undefined).");
+  process.exit(1);
+}
 
 const express = require("express");
 const mongoose = require("mongoose");
 const userRoutes = require("./Routes/userRoutes");
+const authRoutes = require("./Routes/authRoutes");   
 
 const app = express();
 const PORT = process.env.PORT;
-
+ 
 // Middleware
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());      // to handle JSON body
@@ -28,7 +32,7 @@ mongoose
 
 // Routes
 app.use("/", userRoutes);   // all user-related endpoints
-
+app.use("/", authRoutes);
 // Start server
 app.listen(PORT, () => {
   console.log(` Server running on http://localhost:${PORT}`);
