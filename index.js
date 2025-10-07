@@ -1,39 +1,64 @@
 // index.js                    //cd C:\Users\VAIBHAV-MAURYA\DevRepos\Node-for-backend = this is path name
-                               // whenever get error use above line 
+                               
 
-require("dotenv").config();                       // use for security,flexibility(mongodb://127.0.0.1:27017/devDB,mongodb+srv://cluster/...), maintainability
-//console.log("Loaded PORT:", process.env.PORT);              //way of calling .env
-// console.log("Loaded MONGO_URL:", process.env.MONGO_URL);
-if (!process.env.JWT_SECRET) {
-  console.error("FATAL: JWT_SECRET is not set in .env (process.env.JWT_SECRET is undefined).");
-  process.exit(1);
-}
-
-const express = require("express");
-const mongoose = require("mongoose");
-const userRoutes = require("./Routes/userRoutes");
-const authRoutes = require("./Routes/authRoutes");   
-
+const express = require('express');
+const mongoose = require('mongoose');
+const personRoutes = require('./Routes/studentRoutes');
 const app = express();
-const PORT = process.env.PORT;
- 
-// Middleware
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());      // to handle JSON body
 
-// DB connection
-mongoose
-  .connect(process.env.MONGO_URL)
-  .then(() => console.log(" MongoDB Connected"))
-  .catch((err) => {
-    console.error(" Mongo Error:", err);
-    process.exit(1);      // Exit if DB not connected
-  });
 
-// Routes
-app.use("/", userRoutes);   // all user-related endpoints
-app.use("/", authRoutes);
-// Start server
-app.listen(PORT, () => {
-  console.log(` Server running on http://localhost:${PORT}`);
+//mongoDB  connection
+require('dotenv').config();
+const connectDB = require('./db');
+connectDB();   //call function
+
+const PORT = process.env.PORT || 8000
+
+//Models
+app.use(express.json()); // middleware to read JSON body
+app.use(express.urlencoded({extended: true}));
+
+
+const passport = require('./auth');
+app.use(passport.initialize());                                                                    //auth line 2
+const LocalAuthMiddleware = passport.authenticate('local', {session: false});    //auth line 3
+
+//get method,,,  //this is get rout jise aaise call karenge http://localhost:7000/
+app.get('/', LocalAuthMiddleware , function(req,res){      
+    res.send('Welcome back to my school')
 });
+
+
+//imprt the router file for person
+const studentRoutes = require('./Routes/studentRoutes');
+app.use('/person',  studentRoutes);         //yaha person likh dene se waha se remove kr diya personRout se
+
+
+
+app.post('/login', LocalAuthMiddleware, (req, res) => {
+    res.json({ message: "Login successful", user: req.user });
+});
+
+
+app.get('/chicken', (req,res) => {
+    var customized_chicken = {
+        name: " buttor chicken",
+        size: ' 5kg extra large',
+        is_buttor_more: true,
+        is_buttor_old: false
+    }
+    res.send(customized_chicken);
+    res.send('sure sir, i would love to serve chicken');
+});
+
+app.post('/stuff', (req, res) => {
+    console.log('jai shree ram');                    //terminal pe
+    res.send('data going to server...');             //postman pe
+})
+
+
+
+// app.listen(PORT); //from this line of code our server will get localhost...,   this is commented b/c below is written
+app.listen(PORT, () => {
+    console.log('Express is connected');
+});          //localhost ke sath sath surety bhi mila ki server run ho rha h...
