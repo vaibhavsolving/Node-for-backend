@@ -6,6 +6,11 @@ const mongoose = require('mongoose');
 const personRoutes = require('./Routes/studentRoutes');
 const app = express();
 
+//Cron job
+const startCron = require("./cronExample");
+startCron();
+
+
 
 //mongoDB  connection
 require('dotenv').config();
@@ -57,8 +62,8 @@ app.post('/stuff', (req, res) => {
 })
 
 
-
 // app.listen(PORT); //from this line of code our server will get localhost...,   this is commented b/c below is written
 app.listen(PORT, () => {
     console.log('Express is connected');
+    
 });          //localhost ke sath sath surety bhi mila ki server run ho rha h...
